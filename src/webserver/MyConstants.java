@@ -25,11 +25,13 @@ public interface MyConstants {
 	static final int MAX_PORT = 65535;
 	static final int INITIAL_PORT = 10008;
 	
-	static final String DEFAULT_ROOT_DIR = "src/htdocs/";
+	static final String DEFAULT_ROOT_DIR = "src/htdocs/TestSite/";
 	static final String DEFAULT_MAINTENANCE_DIR = "src/htdocs/maintenance_directory/";
-	static final String DEFAULT_FILE = "index.html";
+	static final String DEFAULT_404_DIR = "src/htdocs/";
+	static final String DEFAULT_FILE = "a.html";
 	static final String MAINTENANCE_FILE = "maintenance.html";
-	static final String FILE_NOT_FOUND = "404.html";
+	static final String FILE_NOT_FOUND_HTML = "404.html";
+	static final String FILE_NOT_FOUND_CSS = "404.css";
 	
 	static final String OK_200 = "200 OK";
 	static final String NOT_FOUND_404 = "404 Not Found";
