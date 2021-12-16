@@ -3,6 +3,8 @@ package webserver;
 import java.net.*;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
+
 import java.io.*;
 
 public class WebServer extends Thread implements Runnable, MyConstants {
@@ -12,6 +14,13 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 	private static ServerSocket serverSocket = null;
 	private static String rootDirectory = DEFAULT_ROOT_DIR;
 	private static String maintenanceDirectory = DEFAULT_MAINTENANCE_DIR;
+	//verifiers
+	public boolean serverIsRunning() {
+		return serverIsRunning;
+	}
+	public boolean serverIsInMaintenance() {
+		return serverIsInMaintenance;
+	}
 	//setters
 	public static void setServerIsRunning(boolean value) {
 		serverIsRunning = value;
@@ -37,20 +46,19 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 		}
 		return false;
 	}
-	public static void setServerSocket(int port) throws IllegalArgumentException {
+	public synchronized static void setServerSocket(int port) throws IllegalArgumentException {
 		if(port < MIN_PORT || port > MAX_PORT)
 			throw new IllegalArgumentException();
-		try {
-			if(serverSocket!=null) {
+		if(serverSocket!=null) {
+			try {
 				serverSocket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(-1);
 			}
-		} catch (IOException e) {
-			System.err.println("Could not close port: " + serverSocket.getLocalPort());
-			System.exit(-1);
 		}
 		try {
 			serverSocket = new ServerSocket(port);
-			System.err.println(serverSocket.getLocalPort());
 		} catch (IOException e) {
 			System.err.println("Could not listen on port: " + port);
 			System.exit(-1);
@@ -67,87 +75,92 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 		clientSocket = socket;
 	}
 	
-	public static String read(String filepath) throws FileNotFoundException, NullPointerException {
+	public static byte[] read(String filepath) throws NullPointerException, IOException {
 		String s="";
 		File file = new File(filepath);
 		if(!file.exists()) {
 			throw new FileNotFoundException();
+		}
+		if(filepath.endsWith(".jpg")) {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write( ImageIO.read(file), "jpg", baos );
+			baos.flush();
+			return baos.toByteArray();
 		}
 		Scanner scanner = new Scanner(file);
 		while (scanner.hasNextLine()) {
 			s += scanner.nextLine();
 		}
 		scanner.close();
-		return s;
+		return s.getBytes();
 	}
 	
-	public String[] getResource(String filename) throws NullPointerException {
+	public Object[] getResource(String filename) throws NullPointerException {
 		if(filename==null)throw new NullPointerException();
-		String[] file = new String[2];
 		if(serverIsRunning) {
 			try {
 				if(filename.equals(FILE_NOT_FOUND_CSS)) {
-					file[0] = read(DEFAULT_404_DIR + FILE_NOT_FOUND_CSS);
+					return new Object[] {read(DEFAULT_404_DIR + FILE_NOT_FOUND_CSS), OK_200};
 				} else if(!serverIsInMaintenance) {
 					if(filename.equals("")) {
-						file[0] = read(rootDirectory + DEFAULT_FILE);	
+						return new Object[] {read(rootDirectory + DEFAULT_FILE), OK_200};
 					} else {
-						file[0] = read(rootDirectory + filename);
+						return new Object[] {read(rootDirectory + filename), OK_200};
 					}
 				} else if(filename.endsWith(".css")) {
-					file[0] = read(maintenanceDirectory + filename);
+					return new Object[] {read(maintenanceDirectory + filename), OK_200};
 				} else {
-					file[0] = read(maintenanceDirectory + MAINTENANCE_FILE);
+					return new Object[] {read(maintenanceDirectory + MAINTENANCE_FILE), OK_200};
 				}
-				file[1] = OK_200;
 			} catch (FileNotFoundException e) {
 				try {
-					file[0] = read(DEFAULT_404_DIR + FILE_NOT_FOUND_HTML);
+					return new Object[] {read(DEFAULT_404_DIR + FILE_NOT_FOUND_HTML), NOT_FOUND_404};
 				} catch (FileNotFoundException e1) {
 					System.err.println("404 error page not found!");
 					System.exit(-1);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					System.exit(-1);
 				}
-				file[1] = NOT_FOUND_404;
-		    }
-		} else {
-			file[0] = "";
-			file[1] = REQUEST_TIMEOUT_408;
+		    } catch (IOException e) {
+		    	e.printStackTrace();
+				System.exit(-1);
+			}
 		}
-		return file;
+		return new Object[] {"".getBytes(), REQUEST_TIMEOUT_408};
 	}
 	
-	public void sendResponse(String[] file, OutputStream out) throws NullPointerException, IllegalArgumentException {
-		if(file==null||file[0]==null||file[1]==null||out==null) {
+	public void sendResponse(Object[] data, OutputStream out) throws NullPointerException, IllegalArgumentException {
+		if(data==null||out==null) {
 			throw new NullPointerException();
 		}
-		if(file.length!=2) {
+		if(data.length != 2) {
 			throw new IllegalArgumentException();
 		}
-		if(!file[1].equals(OK_200)&&!file[1].equals(NOT_FOUND_404)&&!file[1].equals(REQUEST_TIMEOUT_408)) {
+		if(data[0]==null||data[1]==null) {
+			throw new NullPointerException();
+		}
+		if(!data[1].equals(OK_200)&&!data[1].equals(NOT_FOUND_404)&&!data[1].equals(REQUEST_TIMEOUT_408)) {
 			throw new IllegalArgumentException();
 		}
 		
 		String CRLF = "\n\r";
-		String response = "HTTP/1.1 " + file[1] + CRLF + "Content-Length: " + file[0].getBytes().length + CRLF + CRLF + file[0] + CRLF + CRLF;
+		byte[] responsePart1 = ("HTTP/1.1 " + data[1] + CRLF + "Content-Length: " + ((byte[]) data[0]).length + CRLF + CRLF).getBytes();
+		byte[] responsePart2 = (byte[]) data[0];
+		byte[] responsePart3 = (CRLF + CRLF).getBytes();
+		
+		byte[] response = new byte[responsePart1.length + responsePart2.length + responsePart3.length];
+		System.arraycopy(responsePart1, 0, response, 0, responsePart1.length);
+		System.arraycopy(responsePart2, 0, response, responsePart1.length, responsePart2.length);
+		System.arraycopy(responsePart3, 0, response, responsePart2.length, responsePart3.length);
+		
 		try {
-			out.write(response.getBytes());
+			out.write(response);
 		} catch (IOException e) {
 			System.err.println("Error writing response!");
 			System.exit(-1);
 		}
     }
-	
-	public String format(String s) {
-		String http = "HTTP/";
-		String[] pieces = s.split(http)[0].split(" ");
-		String result = "";
-		for(int i = 0; i<pieces.length; i++) {
-			if(i!=0) {
-				result += " " + pieces[i];
-			}
-		}
-		return result.substring(1);
-	}
 	
 	public void run() {
 		System.out.println("New Communication Thread Started");
@@ -160,8 +173,7 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 				while ((inputLine = in.readLine()) != null) {
 					if(inputLine.startsWith("GET")) {
 						System.err.println(inputLine);
-						//inputLine.split(" ")[1].substring(1)
-						sendResponse(getResource(format(inputLine)), out);
+						sendResponse(getResource(inputLine.split(" ")[1].substring(1).replace("%20", " ")), out);
 				    }
 					if (inputLine.trim().equals("")) {
 						break;
@@ -185,16 +197,16 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 		WebServer.setServerSocket(INITIAL_PORT);
 		System.out.println("Connection Socket Created");
 		while(serverIsOpen) {
-			System.out.println(serverIsRunning);
-			if(serverIsRunning)
-			try {
-				//while (true) {
+			System.err.println("something");
+			Thread.sleep(1000);
+			if(serverIsRunning) {
+				try {
 					System.out.println("Waiting for Connection");
 					new WebServer(serverSocket.accept()).start();
-				//}
-			} catch (IOException e) {
-				System.err.println("Accept failed.");
-				//System.exit(1);
+				} catch (IOException e) {
+					System.err.println("Accept failed.");
+					//System.exit(1);
+				}
 			}
 		}
 		try {

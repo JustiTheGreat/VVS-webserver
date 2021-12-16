@@ -3,25 +3,69 @@ package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
+import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 
+import javax.swing.JButton;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import webserver.Frame;
 import webserver.MyConstants;
 import webserver.WebServer;
 
 public class WebServerTest implements MyConstants {
 	private static WebServer webServer;
+	private static Frame frame;
+	private static JButton button;
 	@BeforeClass
 	public static void setup() {
 		webServer = new WebServer(new Socket());
+		frame = new Frame();
+		button = new JButton();
+		
 	}
+//----------------------------------------------------------------------------------------------------------state
+	@Test
+	public void testStateStart() {
+		frame.actionPerformed(new ActionEvent(button, 0, START_SERVER));
+		assertTrue("testStateStart",webServer.serverIsRunning());
+	}
+	@Test
+	public void testStateStartStop() {
+		frame.actionPerformed(new ActionEvent(button, 0, STOP_SERVER));
+		assertFalse("testStateStartStop",webServer.serverIsRunning());
+	}
+	@Test
+	public void testStateStartMaintenance() {
+		frame.actionPerformed(new ActionEvent(button, 0, START_SERVER));
+		frame.actionPerformed(new ActionEvent(button, 0, START_MAINTENANCE));
+		assertTrue("testStateStartMaintenance",webServer.serverIsInMaintenance());
+	}
+	@Test
+	public void testStateStartMaintenanceStop() {
+		frame.actionPerformed(new ActionEvent(button, 0, STOP_SERVER));
+		assertFalse("testStateStartMaintenance: maintenance",webServer.serverIsInMaintenance());
+		assertFalse("testStateStartMaintenance: stop",webServer.serverIsRunning());
+	}
+	@Test
+	public void testStateStartMaintenanceMaintenance() {
+		frame.actionPerformed(new ActionEvent(button, 0, START_SERVER));
+		frame.actionPerformed(new ActionEvent(button, 0, START_MAINTENANCE));
+		frame.actionPerformed(new ActionEvent(button, 0, STOP_MAINTENANCE));
+		assertFalse("testStateStartMaintenanceMaintenance",webServer.serverIsInMaintenance());
+	}
+//----------------------------------------------------------------------------------------------------------getServerSocket
+	@Test
+	public void testGetServerSocketAfterSet() throws IOException {
+		WebServer.setServerSocket(10008);
+		assertEquals("Test failed: getServerSocketAfterSet",10008,WebServer.getServerSocket().getLocalPort());
+	}
+//----------------------------------------------------------------------------------------------------------setServerSocket
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetServerSocketPortSmallerThan1024() {
 		WebServer.setServerSocket(1023);
@@ -32,17 +76,7 @@ public class WebServerTest implements MyConstants {
 		WebServer.setServerSocket(65536);
 		System.out.println("Test failed: PortBiggerThan65535");
 	}
-//----------------------------------------------------------------------------------------------------------------------------------
-	@Test
-	public void testGetServerSocket() {
-		assertEquals("Test failed: getServerSocket",null,WebServer.getServerSocket());
-	}
-	@Test
-	public void testGetServerSocketAfterSet() throws IOException {
-		WebServer.setServerSocket(10008);
-		assertEquals("Test failed: getServerSocketAfterSet",10008,WebServer.getServerSocket().getLocalPort());
-	}
-//----------------------------------------------------------------------------------------------------------------------------------	
+//----------------------------------------------------------------------------------------------------------validateDirPath
 	@Test(expected=NullPointerException.class)
 	public void testValidateNullDirPath() {
 		WebServer.validateDirectoryPath(null);
@@ -60,18 +94,18 @@ public class WebServerTest implements MyConstants {
 	public void testValidateaNotADirPath() {
 		assertFalse("Test failed: NotADirPath",WebServer.validateDirectoryPath("src/nonexist/"));
 	}
-//----------------------------------------------------------------------------------------------------------------------------------	
+//----------------------------------------------------------------------------------------------------------read
 	@Test(expected = NullPointerException.class)
-	public void testNullPathRead() throws FileNotFoundException, NullPointerException {
+	public void testNullPathRead() throws NullPointerException, IOException {
 		WebServer.read(null);
 		System.out.println("Test failed: ReadNull");
 	}
 	@Test(expected = FileNotFoundException.class)
-	public void testNotFoundRead() throws FileNotFoundException, NullPointerException {
+	public void testNotFoundRead() throws NullPointerException, IOException {
 		WebServer.read("@1234");
 		System.out.println("Test failed: ReadNull");
 	}
-//----------------------------------------------------------------------------------------------------------------------------------	
+//----------------------------------------------------------------------------------------------------------getResource
 //	@Test
 //	public void getResourceResource_Empty() {
 //		WebServer webServer = new WebServer(new Socket());
@@ -125,7 +159,7 @@ public class WebServerTest implements MyConstants {
 		WebServer.setServerIsRunning(false);
 		assertEquals("Test failed: getResourceStatusCode_WhileStopped", REQUEST_TIMEOUT_408, webServer.getResource(DEFAULT_FILE)[1]);
 	}
-//----------------------------------------------------------------------------------------------------------------------------------	
+//----------------------------------------------------------------------------------------------------------sendResponse
 	@Test(expected = NullPointerException.class)
 	public void sendResponse_NullFile() {
 		webServer.sendResponse(null,System.out);
@@ -148,7 +182,7 @@ public class WebServerTest implements MyConstants {
 	}
 	@Test(expected = IllegalArgumentException.class)
 	public void sendResponse_WrongSizeFileVector() {
-		webServer.sendResponse(new String[]{},System.out);
+		webServer.sendResponse(new Object[0],System.out);
 		System.out.println("Test failed: sendResponse_WrongSizeFileVector");
 	}
 	@Test(expected = IllegalArgumentException.class)

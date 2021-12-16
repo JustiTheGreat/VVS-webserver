@@ -24,7 +24,7 @@ public interface MyConstants {
 	static final int MIN_PORT = 1024;
 	static final int MAX_PORT = 65535;
 	static final int INITIAL_PORT = 10008;
-	
+	//efault directories and files
 	static final String DEFAULT_ROOT_DIR = "src/htdocs/TestSite/";
 	static final String DEFAULT_MAINTENANCE_DIR = "src/htdocs/maintenance_directory/";
 	static final String DEFAULT_404_DIR = "src/htdocs/";

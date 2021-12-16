@@ -41,8 +41,6 @@ public class Frame implements ActionListener, MyConstants {
     private final JSpinner jSpinner = new JSpinner();
     private final JTextField jTextField1 = new JTextField();
     private final JTextField jTextField2 = new JTextField();
-    
-    //private WebServer webServer = null;
 	
     public Frame() {
         jFrame.getContentPane().setLayout(borderLayout);
@@ -141,7 +139,7 @@ public class Frame implements ActionListener, MyConstants {
 				try {
 					jLabel5.setText(InetAddress.getLocalHost().getHostAddress());
 				} catch (UnknownHostException e) {
-					System.err.println("Unknon host");
+					System.err.println("Unknown host");
 					System.exit(-1);
 				}
 				jLabel6.setText(""+jSpinner.getValue());
