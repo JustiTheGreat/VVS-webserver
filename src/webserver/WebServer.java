@@ -1,10 +1,12 @@
 package webserver;
 
 import java.net.*;
+import java.util.Collection;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class WebServer extends Thread implements Runnable, MyConstants {
@@ -68,25 +70,62 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 	public static ServerSocket getServerSocket() {
 		return serverSocket;
 	}
-	//webserver
+	public static String getRootDir() {
+		return rootDirectory;
+	}
+	public static String getMaintenanceDir() {
+		return maintenanceDirectory;
+	}
+	//web server
 	private Socket clientSocket = null;
 	
 	public WebServer(Socket socket) {
 		clientSocket = socket;
 	}
 	
-	public static byte[] read(String filepath) throws NullPointerException, IOException {
-		String s="";
+	private static File search(File file, String filename) {
+		if (file.isDirectory()) {
+			if (file.canRead()) {
+				for (File temp : file.listFiles()) {
+					if (temp.isDirectory()) {
+						File wantedFile = search(temp, filename);
+						if(wantedFile!=null) {
+							return wantedFile;
+						}
+					} else {
+						if (filename.equals(temp.getName().toLowerCase())) {			
+							return new File(temp.getAbsoluteFile().toString());
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static Object read(String filepath) throws NullPointerException, IOException, FileNotFoundException {
 		File file = new File(filepath);
 		if(!file.exists()) {
-			throw new FileNotFoundException();
+			String filename = filepath.split("/")[filepath.split("/").length-1];
+			File root = new File(rootDirectory);
+			if (root.isDirectory()) {
+				File wantedFile = search(root, filename);
+				if(wantedFile!=null) {
+					file = wantedFile;
+				} else {
+					throw new FileNotFoundException();
+				}
+			} else {
+				throw new FileNotFoundException();
+			}
 		}
 		if(filepath.endsWith(".jpg")) {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write( ImageIO.read(file), "jpg", baos );
+			ImageIO.write(ImageIO.read(file), "jpg", baos);
 			baos.flush();
 			return baos.toByteArray();
 		}
+		String s="";
 		Scanner scanner = new Scanner(file);
 		while (scanner.hasNextLine()) {
 			s += scanner.nextLine();
@@ -99,22 +138,38 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 		if(filename==null)throw new NullPointerException();
 		if(serverIsRunning) {
 			try {
-				if(filename.equals(FILE_NOT_FOUND_CSS)) {
-					return new Object[] {read(DEFAULT_404_DIR + FILE_NOT_FOUND_CSS), OK_200};
-				} else if(!serverIsInMaintenance) {
-					if(filename.equals("")) {
-						return new Object[] {read(rootDirectory + DEFAULT_FILE), OK_200};
-					} else {
-						return new Object[] {read(rootDirectory + filename), OK_200};
+				if(serverIsInMaintenance) {
+					if(filename.equals(MAINTENANCE_CSS)) {
+						return new Object[] {read(maintenanceDirectory + filename), CSS, OK_200};
 					}
-				} else if(filename.endsWith(".css")) {
-					return new Object[] {read(maintenanceDirectory + filename), OK_200};
+					if(filename.endsWith(".jpg")) {
+						return new Object[] {read(maintenanceDirectory + filename), JPG, OK_200};
+					}
+					return new Object[] {read(maintenanceDirectory + MAINTENANCE_FILE), HTML, OK_200};
 				} else {
-					return new Object[] {read(maintenanceDirectory + MAINTENANCE_FILE), OK_200};
+					if(filename.equals("")) {
+						return new Object[] {read(rootDirectory + DEFAULT_FILE), HTML, OK_200};
+					}
+					if(filename.endsWith(".css")) {
+						return new Object[] {read(rootDirectory + filename), CSS, OK_200};
+					}
+					if(filename.endsWith(".jpg")) {
+						return new Object[] {read(rootDirectory + filename), JPG, OK_200};
+					}
+					if(filename.endsWith(".html")) {
+						return new Object[] {read(rootDirectory + filename), HTML, OK_200};
+					}
+					return new Object[] {read(rootDirectory + filename), HTML, OK_200};
 				}
 			} catch (FileNotFoundException e) {
 				try {
-					return new Object[] {read(DEFAULT_404_DIR + FILE_NOT_FOUND_HTML), NOT_FOUND_404};
+					if(filename.equals(FILE_NOT_FOUND_CSS)) {
+						return new Object[] {read(DEFAULT_404_DIR + FILE_NOT_FOUND_CSS), CSS, OK_200};
+					}
+					if(filename.endsWith(".jpg")) {
+						return new Object[] {read(DEFAULT_404_DIR + filename), JPG, OK_200};
+					}
+					return new Object[] {read(DEFAULT_404_DIR + FILE_NOT_FOUND_HTML), HTML, NOT_FOUND_404};
 				} catch (FileNotFoundException e1) {
 					System.err.println("404 error page not found!");
 					System.exit(-1);
@@ -127,32 +182,40 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 				System.exit(-1);
 			}
 		}
-		return new Object[] {"".getBytes(), REQUEST_TIMEOUT_408};
+		return new Object[] {"".getBytes(), HTML, REQUEST_TIMEOUT_408};
 	}
 	
 	public void sendResponse(Object[] data, OutputStream out) throws NullPointerException, IllegalArgumentException {
 		if(data==null||out==null) {
 			throw new NullPointerException();
 		}
-		if(data.length != 2) {
+		if(data.length != 3) {
 			throw new IllegalArgumentException();
 		}
-		if(data[0]==null||data[1]==null) {
+		if(data[0]==null||data[1]==null||data[2]==null) {
 			throw new NullPointerException();
 		}
-		if(!data[1].equals(OK_200)&&!data[1].equals(NOT_FOUND_404)&&!data[1].equals(REQUEST_TIMEOUT_408)) {
+		if(!data[1].equals(HTML)&&!data[1].equals(CSS)&&!data[1].equals(JPG)) {
+			throw new IllegalArgumentException();
+		}
+		if(!data[2].equals(OK_200)&&!data[2].equals(NOT_FOUND_404)&&!data[2].equals(REQUEST_TIMEOUT_408)) {
 			throw new IllegalArgumentException();
 		}
 		
-		String CRLF = "\n\r";
-		byte[] responsePart1 = ("HTTP/1.1 " + data[1] + CRLF + "Content-Length: " + ((byte[]) data[0]).length + CRLF + CRLF).getBytes();
-		byte[] responsePart2 = (byte[]) data[0];
+		String CRLF = "\r\n";
+		byte[] bytes = (byte[])data[0];
+		String contentType = (String)data[1];
+		String status = (String)data[2];
+		byte[] responsePart1 = null;
+		
+		responsePart1 = ("HTTP/1.1 " + status + CRLF + "Content-Type: " + contentType + CRLF + "Content-Length: " + bytes.length + CRLF + CRLF).getBytes();
+		byte[] responsePart2 = bytes;
 		byte[] responsePart3 = (CRLF + CRLF).getBytes();
 		
 		byte[] response = new byte[responsePart1.length + responsePart2.length + responsePart3.length];
 		System.arraycopy(responsePart1, 0, response, 0, responsePart1.length);
 		System.arraycopy(responsePart2, 0, response, responsePart1.length, responsePart2.length);
-		System.arraycopy(responsePart3, 0, response, responsePart2.length, responsePart3.length);
+		System.arraycopy(responsePart3, 0, response, responsePart1.length + responsePart2.length, responsePart3.length);
 		
 		try {
 			out.write(response);
@@ -172,7 +235,6 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 			try {
 				while ((inputLine = in.readLine()) != null) {
 					if(inputLine.startsWith("GET")) {
-						System.err.println(inputLine);
 						sendResponse(getResource(inputLine.split(" ")[1].substring(1).replace("%20", " ")), out);
 				    }
 					if (inputLine.trim().equals("")) {
@@ -197,8 +259,7 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 		WebServer.setServerSocket(INITIAL_PORT);
 		System.out.println("Connection Socket Created");
 		while(serverIsOpen) {
-			System.err.println("something");
-			Thread.sleep(1000);
+			Thread.sleep(10);
 			if(serverIsRunning) {
 				try {
 					System.out.println("Waiting for Connection");

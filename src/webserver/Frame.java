@@ -176,6 +176,7 @@ public class Frame implements ActionListener, MyConstants {
 	    		jTextField2.setForeground(BLACK);
 		    	jFrame.setTitle(TITLE_WHILE_MAINTAINING);
 				jLabel4.setText(MAINTENANCE);
+				jCheckBox.setSelected(true);
 				jCheckBox.setActionCommand(STOP_MAINTENANCE);
 				jTextField1.setEnabled(true);
 				jTextField2.setEnabled(false);
@@ -189,6 +190,7 @@ public class Frame implements ActionListener, MyConstants {
 	    		jTextField1.setForeground(BLACK);
 		    	jFrame.setTitle(TITLE_WHILE_RUNNING);
 				jLabel4.setText(RUNNING);
+				jCheckBox.setSelected(false);
 				jCheckBox.setActionCommand(START_MAINTENANCE);
 				jTextField1.setEnabled(false);
 				jTextField2.setEnabled(true);
@@ -198,6 +200,32 @@ public class Frame implements ActionListener, MyConstants {
 	    	}
 	    }
 	}
-
-
+	//methods for testing
+	public String getIPAddress() {
+    	return jLabel5.getText();
+    }
+    public String getDisplayedPort() {
+    	return jLabel6.getText();
+    }
+    public String getSpinnerPort() {
+    	return jSpinner.getValue().toString();
+    }
+    public String getTextfieldRootDir() {
+    	return jTextField1.getText();
+    }
+    public String getTextfieldMaintenanceDir() {
+    	return jTextField2.getText();
+    }
+    public boolean checkboxIsSelected() {
+    	return jCheckBox.isSelected();
+    }
+    public boolean portSpinnerIsEnabled() {
+    	return jSpinner.isEnabled();
+    }
+    public boolean rootDirTextfieldIsEnabled() {
+    	return jTextField1.isEnabled();
+    }
+    public boolean maintenanceDirTextfieldIsEnabled() {
+    	return jTextField2.isEnabled();
+    }
 }

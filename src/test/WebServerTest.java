@@ -25,84 +25,51 @@ public class WebServerTest implements MyConstants {
 	@BeforeClass
 	public static void setup() {
 		webServer = new WebServer(new Socket());
-		frame = new Frame();
-		button = new JButton();
-		
-	}
-//----------------------------------------------------------------------------------------------------------state
-	@Test
-	public void testStateStart() {
-		frame.actionPerformed(new ActionEvent(button, 0, START_SERVER));
-		assertTrue("testStateStart",webServer.serverIsRunning());
-	}
-	@Test
-	public void testStateStartStop() {
-		frame.actionPerformed(new ActionEvent(button, 0, STOP_SERVER));
-		assertFalse("testStateStartStop",webServer.serverIsRunning());
-	}
-	@Test
-	public void testStateStartMaintenance() {
-		frame.actionPerformed(new ActionEvent(button, 0, START_SERVER));
-		frame.actionPerformed(new ActionEvent(button, 0, START_MAINTENANCE));
-		assertTrue("testStateStartMaintenance",webServer.serverIsInMaintenance());
-	}
-	@Test
-	public void testStateStartMaintenanceStop() {
-		frame.actionPerformed(new ActionEvent(button, 0, STOP_SERVER));
-		assertFalse("testStateStartMaintenance: maintenance",webServer.serverIsInMaintenance());
-		assertFalse("testStateStartMaintenance: stop",webServer.serverIsRunning());
-	}
-	@Test
-	public void testStateStartMaintenanceMaintenance() {
-		frame.actionPerformed(new ActionEvent(button, 0, START_SERVER));
-		frame.actionPerformed(new ActionEvent(button, 0, START_MAINTENANCE));
-		frame.actionPerformed(new ActionEvent(button, 0, STOP_MAINTENANCE));
-		assertFalse("testStateStartMaintenanceMaintenance",webServer.serverIsInMaintenance());
-	}
-//----------------------------------------------------------------------------------------------------------getServerSocket
-	@Test
-	public void testGetServerSocketAfterSet() throws IOException {
-		WebServer.setServerSocket(10008);
-		assertEquals("Test failed: getServerSocketAfterSet",10008,WebServer.getServerSocket().getLocalPort());
+		webServer.setServerIsRunning(true);
 	}
 //----------------------------------------------------------------------------------------------------------setServerSocket
+	@Test
+	public void testGetServerSocketAfterSet() throws IOException {
+		webServer.setServerSocket(10008);
+		assertTrue("Test failed: getServerSocketAfterSet",10008==WebServer.getServerSocket().getLocalPort());
+	}
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetServerSocketPortSmallerThan1024() {
-		WebServer.setServerSocket(1023);
+		webServer.setServerSocket(1023);
 		System.out.println("Test failed: PortSmallerThan1024");
 	}
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetServerSocketPortBiggerThan65535() {
-		WebServer.setServerSocket(65536);
+		webServer.setServerSocket(65536);
 		System.out.println("Test failed: PortBiggerThan65535");
 	}
 //----------------------------------------------------------------------------------------------------------validateDirPath
 	@Test(expected=NullPointerException.class)
-	public void testValidateNullDirPath() {
-		WebServer.validateDirectoryPath(null);
+	public void validateNullDirPath() {
+		webServer.validateDirectoryPath(null);
 		System.out.println("Test failed: NullDirPath");
 	}
 	@Test
-	public void testValidateRelativeDirPath() {
-		assertTrue("Test failed: RelativeDirPath",WebServer.validateDirectoryPath("src/"));
+	public void validateRelativeDirPath() {
+		assertTrue("Test failed: RelativeDirPath",webServer.validateDirectoryPath("src/"));
 	}
 	@Test
-	public void testValidateaAbsoluteDirPath() {
-		assertTrue("Test failed: AbsoluteDirPath",WebServer.validateDirectoryPath("C:/Users/justi/Desktop/"));
+	public void validateaAbsoluteDirPath() {
+		assertTrue("Test failed: AbsoluteDirPath",webServer.validateDirectoryPath("C:/Users/justi/Desktop/"));
 	}
 	@Test
-	public void testValidateaNotADirPath() {
-		assertFalse("Test failed: NotADirPath",WebServer.validateDirectoryPath("src/nonexist/"));
+	public void validateaNotADirPath() {
+		assertFalse("Test failed: NotADirPath",webServer.validateDirectoryPath("src/nonexist/"));
 	}
 //----------------------------------------------------------------------------------------------------------read
 	@Test(expected = NullPointerException.class)
 	public void testNullPathRead() throws NullPointerException, IOException {
-		WebServer.read(null);
+		webServer.read(null);
 		System.out.println("Test failed: ReadNull");
 	}
 	@Test(expected = FileNotFoundException.class)
 	public void testNotFoundRead() throws NullPointerException, IOException {
-		WebServer.read("@1234");
+		webServer.read("@1234");
 		System.out.println("Test failed: ReadNull");
 	}
 //----------------------------------------------------------------------------------------------------------getResource
@@ -116,78 +83,60 @@ public class WebServerTest implements MyConstants {
 	
 	@Test(expected=NullPointerException.class)
 	public void getResourceStatusCode_Null() {
-		WebServer.setServerIsRunning(true);
 		webServer.getResource(null);
 		System.out.println("Test failed: getResourceStatusCode_Null");
 	}
 	@Test
 	public void getResourceStatusCode_Empty() {
-		WebServer.setServerIsRunning(true);
-		assertEquals("Test failed: getResourceStatusCode_Null", OK_200, webServer.getResource("")[1]);
+		assertEquals("Test failed: getResourceStatusCode_Null", OK_200, (String)webServer.getResource("")[2]);
 	}
 	@Test
 	public void getResourceStatusCode_Default() {
-		WebServer.setServerIsRunning(true);
-		assertEquals("Test failed: getResourceStatusCode_Default", OK_200, webServer.getResource(DEFAULT_FILE)[1]);
+		assertEquals("Test failed: getResourceStatusCode_Default", OK_200, (String)webServer.getResource(DEFAULT_FILE)[2]);
 	}
 	@Test
 	public void getResourceStatusCode_NotFound() {
-		WebServer.setServerIsRunning(true);
-		assertEquals("Test failed: getResourceStatusCode_NotFound", OK_200, webServer.getResource("abc")[1]);
-	}
-	@Test(expected=NullPointerException.class)
-	public void getResourceStatusCode_NullWhileInMaintenance() {
-		WebServer.setServerIsRunning(true);
-		WebServer.setServerIsInMaintenance(true);
-		webServer.getResource(null);
-		System.out.println("Test failed: getResourceStatusCode_NullWhileInMaintenance");
-	}
-	@Test
-	public void getResourceStatusCode_EmptyWhileInMaintenance() {
-		WebServer.setServerIsRunning(true);
-		WebServer.setServerIsInMaintenance(true);
-		assertEquals("Test failed: getResourceStatusCode_EmptyWhileInMaintenance", OK_200, webServer.getResource("")[1]);
-	}
-	@Test
-	public void getResourceStatusCode_WhileInMaintenance() {
-		WebServer.setServerIsRunning(true);
-		WebServer.setServerIsInMaintenance(true);
-		assertEquals("Test failed: getResourceStatusCode_WhileInMaintenance", OK_200, webServer.getResource(MAINTENANCE_FILE)[1]);
-	}
-	@Test
-	public void getResourceStatusCode_WhileStopped() {
-		WebServer.setServerIsRunning(false);
-		assertEquals("Test failed: getResourceStatusCode_WhileStopped", REQUEST_TIMEOUT_408, webServer.getResource(DEFAULT_FILE)[1]);
+		assertEquals("Test failed: getResourceStatusCode_NotFound", NOT_FOUND_404, (String)webServer.getResource("abc")[2]);
 	}
 //----------------------------------------------------------------------------------------------------------sendResponse
 	@Test(expected = NullPointerException.class)
-	public void sendResponse_NullFile() {
+	public void sendResponse_NullData() {
 		webServer.sendResponse(null,System.out);
-		System.out.println("Test failed: sendResponse_NullFile");
+		System.out.println("Test failed: sendResponse_NullData");
 	}
 	@Test(expected = NullPointerException.class)
-	public void sendResponse_NullFile0() {
-		webServer.sendResponse(new String[]{null,OK_200},System.out);
-		System.out.println("Test failed: sendResponse_NullFile0");
+	public void sendResponse_NullData0() {
+		webServer.sendResponse(new String[]{null,HTML,OK_200},System.out);
+		System.out.println("Test failed: sendResponse_NullData0");
 	}
 	@Test(expected = NullPointerException.class)
-	public void sendResponse_NullFile1() {
-		webServer.sendResponse(new String[]{"",null},System.out);
-		System.out.println("Test failed: sendResponse_NullFile1");
+	public void sendResponse_NullData1() {
+		webServer.sendResponse(new String[]{"",null,OK_200},System.out);
+		System.out.println("Test failed: sendResponse_NullData1");
+	}
+	@Test(expected = NullPointerException.class)
+	public void sendResponse_NullData2() {
+		webServer.sendResponse(new String[]{"",HTML,null},System.out);
+		System.out.println("Test failed: sendResponse_NullData2");
 	}
 	@Test(expected = NullPointerException.class)
 	public void sendResponse_NullOutputStream() {
-		webServer.sendResponse(new String[]{"",OK_200},null);
+		webServer.sendResponse(new String[]{"",HTML,OK_200},null);
 		System.out.println("Test failed: sendResponse_NullOutputStream");
 	}
 	@Test(expected = IllegalArgumentException.class)
 	public void sendResponse_WrongSizeFileVector() {
-		webServer.sendResponse(new Object[0],System.out);
+		webServer.sendResponse(new Object[] {"",""},System.out);
 		System.out.println("Test failed: sendResponse_WrongSizeFileVector");
 	}
 	@Test(expected = IllegalArgumentException.class)
+	public void sendResponse_WrongContentType() {
+		webServer.sendResponse(new String[]{"","ceva",OK_200},System.out);
+		System.out.println("Test failed: sendResponse_WrongResponseStatus");
+	}
+	@Test(expected = IllegalArgumentException.class)
 	public void sendResponse_WrongResponseStatus() {
-		webServer.sendResponse(new String[]{"","ceva"},System.out);
+		webServer.sendResponse(new String[]{"",HTML,"ceva"},System.out);
 		System.out.println("Test failed: sendResponse_WrongResponseStatus");
 	}
 }

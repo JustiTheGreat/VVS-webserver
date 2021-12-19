@@ -24,16 +24,21 @@ public interface MyConstants {
 	static final int MIN_PORT = 1024;
 	static final int MAX_PORT = 65535;
 	static final int INITIAL_PORT = 10008;
-	//efault directories and files
+	//default directories and files
 	static final String DEFAULT_ROOT_DIR = "src/htdocs/TestSite/";
 	static final String DEFAULT_MAINTENANCE_DIR = "src/htdocs/maintenance_directory/";
 	static final String DEFAULT_404_DIR = "src/htdocs/";
 	static final String DEFAULT_FILE = "a.html";
 	static final String MAINTENANCE_FILE = "maintenance.html";
+	static final String MAINTENANCE_CSS = "maintenance.css";
 	static final String FILE_NOT_FOUND_HTML = "404.html";
 	static final String FILE_NOT_FOUND_CSS = "404.css";
-	
+	//response statuses
 	static final String OK_200 = "200 OK";
 	static final String NOT_FOUND_404 = "404 Not Found";
 	static final String REQUEST_TIMEOUT_408 = "408 Request Timeout";
+	//response content types
+	static final String HTML = "text/html";
+	static final String CSS = "text/css";
+	static final String JPG = "image/jpeg";
 }
