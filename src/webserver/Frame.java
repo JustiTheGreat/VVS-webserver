@@ -151,9 +151,13 @@ public class Frame implements ActionListener, MyConstants {
 			} else {
 				if(!WebServer.setRootDirectory(jTextField1.getText())) {
 					jTextField1.setForeground(RED);
+				} else {
+					jTextField1.setForeground(BLACK);
 				}
 				if(!WebServer.setMaintenanceDirectory(jTextField2.getText())) {
 					jTextField2.setForeground(RED);
+				}  else {
+					jTextField2.setForeground(BLACK);
 				}
 			}
 	    } else if (actionEvent.getActionCommand().equals(STOP_SERVER)) {

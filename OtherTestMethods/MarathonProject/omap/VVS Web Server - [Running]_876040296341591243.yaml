@@ -1,0 +1,68 @@
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: actionCommand, value: Stop server}
+    - {method: equals, name: type, value: JButton}
+    created: 1640543499244
+    generalProperties:
+    - {name: accessibleContext.accessibleName, value: Stop server}
+    - {name: tagName, value: button}
+    - {name: indexOfType, value: '0'}
+    - {name: precedingLabel, value: 192.168.0.14}
+    - {name: component.class.name, value: javax.swing.JButton}
+    - {name: instanceOf, value: javax.swing.JButton}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: position, value: '[x=311,y=68]'}
+    - {name: enabled, value: 'true'}
+    - {name: cText, value: Stop server}
+    - {name: actionCommand, value: Stop server}
+    - {name: type, value: JButton}
+    - {name: buttonText, value: Stop server}
+    - {name: accessibleName, value: Stop server}
+    - {name: size, value: '[width=120,height=40]'}
+    modified: 0
+    name: Stop server
+    used: true
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: precedingLabel, value: Maintenance directory}
+    - {method: equals, name: type, value: JTextField}
+    created: 1640543531765
+    generalProperties:
+    - {name: tagName, value: text-field}
+    - {name: indexOfType, value: '1'}
+    - {name: precedingLabel, value: Maintenance directory}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: component.class.name, value: javax.swing.JTextField}
+    - {name: instanceOf, value: javax.swing.JTextField}
+    - {name: position, value: '[x=209,y=221]'}
+    - {name: enabled, value: 'true'}
+    - {name: cText, value: 'C:/Users/justi/Desktop/VVS-webserver/'}
+    - {name: type, value: JTextField}
+    - {name: size, value: '[width=200,height=20]'}
+    modified: 0
+    name: Maintenance directory
+    used: true
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: actionCommand, value: Start maintenance}
+    - {method: equals, name: type, value: JCheckBox}
+    created: 1640543539428
+    generalProperties:
+    - {name: accessibleContext.accessibleName, value: Switch to maintenance mode}
+    - {name: tagName, value: check-box}
+    - {name: indexOfType, value: '0'}
+    - {name: precedingLabel, value: '10010'}
+    - {name: component.class.name, value: javax.swing.JCheckBox}
+    - {name: instanceOf, value: javax.swing.JCheckBox}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: position, value: '[x=276,y=118]'}
+    - {name: enabled, value: 'true'}
+    - {name: cText, value: Switch to maintenance mode}
+    - {name: actionCommand, value: Start maintenance}
+    - {name: type, value: JCheckBox}
+    - {name: buttonText, value: Switch to maintenance mode}
+    - {name: accessibleName, value: Switch to maintenance mode}
+    - {name: size, value: '[width=190,height=20]'}
+    modified: 0
+    name: Switch to maintenance mode
+    used: true

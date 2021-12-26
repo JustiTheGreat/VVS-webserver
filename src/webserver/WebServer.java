@@ -142,9 +142,6 @@ public class WebServer extends Thread implements Runnable, MyConstants {
 					if(filename.equals(MAINTENANCE_CSS)) {
 						return new Object[] {read(maintenanceDirectory + filename), CSS, OK_200};
 					}
-					if(filename.endsWith(".jpg")) {
-						return new Object[] {read(maintenanceDirectory + filename), JPG, OK_200};
-					}
 					return new Object[] {read(maintenanceDirectory + MAINTENANCE_FILE), HTML, OK_200};
 				} else {
 					if(filename.equals("")) {

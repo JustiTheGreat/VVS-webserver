@@ -1,0 +1,66 @@
+- !!net.sourceforge.marathon.objectmap.OMapContainer
+    containerGeneralProperties:
+    - {name: name, value: frame0}
+    - {name: accessibleContext.accessibleName, value: 'VVS Web Server - [Stopped]'}
+    - {name: tagName, value: frame}
+    - {name: indexOfType, value: '0'}
+    - {name: instanceOf, value: javax.swing.JFrame}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: component.class.name, value: javax.swing.JFrame}
+    - {name: position, value: '[x=0,y=0]'}
+    - {name: enabled, value: 'true'}
+    - {name: type, value: JFrame}
+    - {name: title, value: 'VVS Web Server - [Stopped]'}
+    - {name: accessibleName, value: 'VVS Web Server - [Stopped]'}
+    - {name: size, value: '[width=500,height=300]'}
+    containerRecognitionProperties:
+    - {method: equals, name: component.class.name, value: javax.swing.JFrame}
+    - {method: equals, name: title, value: 'VVS Web Server - [Stopped]'}
+    containerTitles: ['VVS Web Server - [Stopped]']
+    created: 1640543473850
+    fileName: VVS Web Server - [Stopped]_7664163056364019255.yaml
+    modified: 1640543552750
+- !!net.sourceforge.marathon.objectmap.OMapContainer
+    containerGeneralProperties:
+    - {name: name, value: frame0}
+    - {name: accessibleContext.accessibleName, value: 'VVS Web Server - [Running]'}
+    - {name: tagName, value: frame}
+    - {name: indexOfType, value: '0'}
+    - {name: instanceOf, value: javax.swing.JFrame}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: component.class.name, value: javax.swing.JFrame}
+    - {name: position, value: '[x=0,y=0]'}
+    - {name: enabled, value: 'true'}
+    - {name: type, value: JFrame}
+    - {name: title, value: 'VVS Web Server - [Running]'}
+    - {name: accessibleName, value: 'VVS Web Server - [Running]'}
+    - {name: size, value: '[width=500,height=300]'}
+    containerRecognitionProperties:
+    - {method: equals, name: component.class.name, value: javax.swing.JFrame}
+    - {method: equals, name: title, value: 'VVS Web Server - [Running]'}
+    containerTitles: ['VVS Web Server - [Running]']
+    created: 1640543499243
+    fileName: VVS Web Server - [Running]_876040296341591243.yaml
+    modified: 1640543552750
+- !!net.sourceforge.marathon.objectmap.OMapContainer
+    containerGeneralProperties:
+    - {name: name, value: frame0}
+    - {name: accessibleContext.accessibleName, value: 'VVS Web Server - [Maintenance]'}
+    - {name: tagName, value: frame}
+    - {name: indexOfType, value: '0'}
+    - {name: instanceOf, value: javax.swing.JFrame}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: component.class.name, value: javax.swing.JFrame}
+    - {name: position, value: '[x=0,y=0]'}
+    - {name: enabled, value: 'true'}
+    - {name: type, value: JFrame}
+    - {name: title, value: 'VVS Web Server - [Maintenance]'}
+    - {name: accessibleName, value: 'VVS Web Server - [Maintenance]'}
+    - {name: size, value: '[width=500,height=300]'}
+    containerRecognitionProperties:
+    - {method: equals, name: component.class.name, value: javax.swing.JFrame}
+    - {method: equals, name: title, value: 'VVS Web Server - [Maintenance]'}
+    containerTitles: ['VVS Web Server - [Maintenance]']
+    created: 1640543531913
+    fileName: VVS Web Server - [Maintenance]_2031241397087701564.yaml
+    modified: 1640543552750

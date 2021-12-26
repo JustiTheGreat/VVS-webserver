@@ -1,0 +1,83 @@
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: actionCommand, value: Start server}
+    - {method: equals, name: type, value: JButton}
+    created: 1640543473851
+    generalProperties:
+    - {name: accessibleContext.accessibleName, value: Start server}
+    - {name: tagName, value: button}
+    - {name: indexOfType, value: '0'}
+    - {name: precedingLabel, value: not running}
+    - {name: component.class.name, value: javax.swing.JButton}
+    - {name: instanceOf, value: javax.swing.JButton}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: position, value: '[x=311,y=68]'}
+    - {name: enabled, value: 'true'}
+    - {name: cText, value: Start server}
+    - {name: actionCommand, value: Start server}
+    - {name: type, value: JButton}
+    - {name: buttonText, value: Start server}
+    - {name: accessibleName, value: Start server}
+    - {name: size, value: '[width=120,height=40]'}
+    modified: 0
+    name: Start server
+    used: true
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: precedingLabel, value: Web root directory}
+    - {method: equals, name: type, value: JTextField}
+    created: 1640543486583
+    generalProperties:
+    - {name: tagName, value: text-field}
+    - {name: indexOfType, value: '0'}
+    - {name: precedingLabel, value: Web root directory}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: component.class.name, value: javax.swing.JTextField}
+    - {name: instanceOf, value: javax.swing.JTextField}
+    - {name: position, value: '[x=209,y=191]'}
+    - {name: enabled, value: 'true'}
+    - {name: cText, value: 'C:/Users/justi/Desktop/'}
+    - {name: type, value: JTextField}
+    - {name: size, value: '[width=200,height=20]'}
+    modified: 0
+    name: Web root directory
+    used: true
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: precedingLabel, value: Maintenance directory}
+    - {method: equals, name: type, value: JTextField}
+    created: 1640543494384
+    generalProperties:
+    - {name: tagName, value: text-field}
+    - {name: indexOfType, value: '1'}
+    - {name: precedingLabel, value: Maintenance directory}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: component.class.name, value: javax.swing.JTextField}
+    - {name: instanceOf, value: javax.swing.JTextField}
+    - {name: position, value: '[x=209,y=221]'}
+    - {name: enabled, value: 'true'}
+    - {name: cText, value: 'C:/Users/justi/Desktop/'}
+    - {name: type, value: JTextField}
+    - {name: size, value: '[width=200,height=20]'}
+    modified: 0
+    name: Maintenance directory
+    used: true
+- !!net.sourceforge.marathon.objectmap.OMapComponent
+    componentRecognitionProperties:
+    - {method: equals, name: precedingLabel, value: Server listening on port}
+    - {method: equals, name: type, value: JSpinner}
+    created: 1640543502390
+    generalProperties:
+    - {name: tagName, value: spinner}
+    - {name: indexOfType, value: '0'}
+    - {name: precedingLabel, value: Server listening on port}
+    - {name: internalFrameIndex2, value: '-1'}
+    - {name: component.class.name, value: javax.swing.JSpinner}
+    - {name: instanceOf, value: javax.swing.JSpinner}
+    - {name: position, value: '[x=209,y=161]'}
+    - {name: enabled, value: 'true'}
+    - {name: type, value: JSpinner}
+    - {name: size, value: '[width=100,height=20]'}
+    modified: 0
+    name: Server listening on port
+    used: true

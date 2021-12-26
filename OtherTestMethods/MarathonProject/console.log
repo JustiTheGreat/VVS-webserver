@@ -1,0 +1,12 @@
+Picked up JAVA_TOOL_OPTIONS: -DkeepLog=false -Dmarathon.launch.mode=javacommand -Dmarathon.mode=recording -javaagent:"C:\Users\justi\Desktop\marathon-5.5.0.0\marathon-java-agent-5.5.0.0.jar"=61689  -javaagent:"C:\Users\justi\Desktop\marathon-5.5.0.0\marathon-java-recorder-5.5.0.0.jar"=61686 -Djava.util.logging.config.file="C:\Users\justi\Desktop\VVS-webserver\OtherTestMethods\MarathonProject\logging.properties" -Dmarathon.project.dir="C:\Users\justi\Desktop\VVS-webserver\OtherTestMethods\MarathonProject"
+Connection Socket Created
+'2021-12-26 20:31:09 WARNING net.sourceforge.marathon.javaagent.JavaAgentHook$1$1 run Application is using a non-utf8 charset. Marathon might cause issues while playing
+'Waiting for Connection
+Accept failed.
+Waiting for Connection
+Picked up JAVA_TOOL_OPTIONS: -DkeepLog=false -Dmarathon.launch.mode=javacommand -Dmarathon.mode=playing -javaagent:"C:\Users\justi\Desktop\marathon-5.5.0.0\marathon-java-agent-5.5.0.0.jar"=61708 -Djava.util.logging.config.file="C:\Users\justi\Desktop\VVS-webserver\OtherTestMethods\MarathonProject\logging.properties" -Dmarathon.project.dir="C:\Users\justi\Desktop\VVS-webserver\OtherTestMethods\MarathonProject"
+Connection Socket Created
+'2021-12-26 20:32:43 WARNING net.sourceforge.marathon.javaagent.JavaAgentHook$1$1 run Application is using a non-utf8 charset. Marathon might cause issues while playing
+'Waiting for Connection
+Accept failed.
+Waiting for Connection

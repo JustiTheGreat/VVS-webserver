@@ -1,0 +1,34 @@
+{
+  "project-settings": {
+    "allure.tests.management.pattern": "",
+    "marathon.issue.dir": "%marathon.project.dir%/Issues",
+    "marathon.checklist.dir": "%marathon.project.dir%/Checklists",
+    "marathon.test.dir": "%marathon.project.dir%/TestCases",
+    "marathon.application.rubyhome": "",
+    "marathon.application.launchtime": "60000",
+    "allure.issues.tracker.pattern": "",
+    "marathon.data.dir": "%marathon.project.dir%/TestData",
+    "marathon.application.classpath": "%marathon.project.dir%/../webserver.jar",
+    "marathon.application.arguments": "",
+    "marathon.feature.dir": "%marathon.project.dir%/Features",
+    "marathon.application.working.dir": "",
+    "marathon.capture.dir": "%marathon.project.dir%/Modules",
+    "marathon.project.launcher.model": "net.sourceforge.marathon.runtime.RuntimeLauncherModel",
+    "marathon.application.mainclass": "webserver.WebServer",
+    "marathon.story.dir": "%marathon.project.dir%/Stories",
+    "marathon.fixture.dir": "%marathon.project.dir%/Fixtures",
+    "marathon.project.description": "",
+    "marathon.application.java.home": "",
+    "marathon.project.name": "MarathonProject",
+    "marathon.suite.dir": "%marathon.project.dir%/TestSuites",
+    "marathon.application.rubypath": "",
+    "marathon.project.script.model": "net.sourceforge.marathon.ruby.RubyScriptModel",
+    "marathon.application.vm.arguments": ""
+  },
+  "display": {},
+  "navigator": {},
+  "workspace": {},
+  "project": {
+    "fixture": "default"
+  }
+}

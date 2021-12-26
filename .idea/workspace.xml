@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1025dadd-689e-4961-ac59-a9271a4d1d62" name="Default Changelist" comment="" />
+    <list default="true" id="1025dadd-689e-4961-ac59-a9271a4d1d62" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/NavigateOnServerPagesTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/test/WebServerMaintenance.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/test/WebServerMaintenance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/test/WebServerTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/webserver/Frame.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/webserver/Frame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/webserver/WebServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/webserver/WebServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dynamic_analysis_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dynamic_analysis_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dynamic_analysis_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dynamic_analysis_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/WebServerMaintenance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/WebServerMaintenance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/WebServerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/WebServerRunning.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webserver/Frame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webserver/Frame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/webserver/WebServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/webserver/WebServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vvs report" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="209EemW9uc6cN9ougxuXuqoNyCW" />
   <component name="ProjectViewState">
